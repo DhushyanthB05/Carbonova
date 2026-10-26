@@ -1,4 +1,4 @@
-﻿# Python
+# Python
 __pycache__/
 *.py[cod]
 *.egg-info/
@@ -30,3 +30,6 @@ Thumbs.db
 # Generated output
 logs/
 *.log
+
+# Large raw datasets and offline data engineering artifacts (not required for runtime execution)
+data/neso_historic_generation.csv

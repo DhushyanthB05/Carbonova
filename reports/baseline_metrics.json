@@ -1,0 +1,66 @@
+{
+  "task": "24-hour seasonal persistence baseline carbon-intensity forecasting",
+  "model_type": "non-parametric_persistence_baseline",
+  "target_variable": "modeled_intensity_gco2_per_kwh",
+  "formula": "baseline_prediction(T) = modeled_intensity(T - 48 half-hour intervals)",
+  "evaluation_assumptions": {
+    "rolling_evaluation": "At interval T, the baseline prediction uses the modeled intensity from T-48 intervals (T - 24 hours), which was fully finalized 24 hours prior to prediction time.",
+    "zero_leakage": "No observation at or after prediction time T is used. All inputs are strictly backward-looking.",
+    "mape_zero_handling": "In both 2023 and 2024, modeled carbon intensity values are strictly positive (min 26.0 gCO2/kWh in 2023, min 14.0 gCO2/kWh in 2024), so division by zero does not occur.",
+    "excluded_inputs": [
+      "forecast_gco2_per_kwh",
+      "carbon_intensity_gco2_per_kwh",
+      "is_anomaly",
+      "anomaly_type",
+      "source_type",
+      "treatment_method",
+      "treatment_note"
+    ]
+  },
+  "diagnostics_2023": {
+    "description": "2023 Training Period Baseline Diagnostics (In-sample reference; NOT model training)",
+    "evaluated_rows": 17520,
+    "total_rows": 17520,
+    "metrics": {
+      "mae_gco2_per_kwh": 42.3743,
+      "rmse_gco2_per_kwh": 56.4038,
+      "r2_score": 0.1879,
+      "mape_percent": 34.56
+    }
+  },
+  "equivalent_horizon_baseline_evaluation_2024": {
+    "description": "Fair Equivalent-Horizon (30-Minute) Persistence Baseline on 2024 Test Set",
+    "forecast_horizon": "Next half-hour (30 minutes, 1 step ahead)",
+    "formula": "baseline_prediction(T) = modeled_intensity(T - 1 half-hour interval)",
+    "evaluated_rows": 17568,
+    "metrics": {
+      "mae_gco2_per_kwh": 4.9265,
+      "rmse_gco2_per_kwh": 6.9948,
+      "r2_score": 0.9863,
+      "mape_percent": 4.66
+    },
+    "rf_model_comparison": {
+      "rf_mae_gco2_per_kwh": 4.1455,
+      "rf_rmse_gco2_per_kwh": 5.6275,
+      "rf_r2_score": 0.9912,
+      "rf_mape_percent": 4.22,
+      "mae_improvement_percent": 15.85,
+      "rmse_improvement_percent": 19.55,
+      "r2_improvement": 0.0049,
+      "formula": "Improvement (%) = ((Baseline MAE - Model MAE) / Baseline MAE) * 100"
+    }
+  },
+  "seasonal_24h_baseline_evaluation_2024": {
+    "description": "2024 Final Baseline Evaluation (Out-of-sample test period)",
+    "evaluated_rows": 17568,
+    "total_rows": 17568,
+    "metrics": {
+      "mae_gco2_per_kwh": 40.7313,
+      "rmse_gco2_per_kwh": 53.3597,
+      "r2_score": 0.205,
+      "mape_percent": 39.63
+    },
+    "forecast_horizon": "24 hours (48 steps ahead)",
+    "note": "Retained as seasonal diurnal baseline; not an equivalent 30-minute horizon."
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "model_type": "RandomForestRegressor",
+  "task": "Next-half-hour carbon intensity forecasting",
+  "target_variable": "modeled_intensity_gco2_per_kwh",
+  "features": [
+    "lag_1_half_hour",
+    "lag_2_half_hour",
+    "lag_48_half_hour",
+    "lag_336_half_hour",
+    "rolling_mean_past_24h",
+    "rolling_std_past_24h",
+    "hour",
+    "day_of_week",
+    "month",
+    "is_weekend",
+    "settlement_period",
+    "sin_hour",
+    "cos_hour",
+    "sin_period",
+    "cos_period",
+    "sin_day_of_week",
+    "cos_day_of_week"
+  ],
+  "feature_count": 17,
+  "excluded_columns": [
+    "forecast_gco2_per_kwh",
+    "carbon_intensity_gco2_per_kwh",
+    "is_anomaly",
+    "anomaly_type",
+    "source_type",
+    "treatment_method",
+    "treatment_note",
+    "region"
+  ],
+  "model_parameters": {
+    "n_estimators": 100,
+    "max_depth": 16,
+    "min_samples_split": 5,
+    "min_samples_leaf": 2,
+    "max_features": 1.0,
+    "random_state": 42,
+    "n_jobs": -1
+  },
+  "training_time_seconds": 1.53,
+  "split_configuration": {
+    "train_set": {
+      "rows": 14016,
+      "start": "2023-01-01T00:00Z",
+      "end": "2023-10-19T23:30Z",
+      "percentage_of_2023": 80.0
+    },
+    "validation_set": {
+      "rows": 3504,
+      "start": "2023-10-20T00:00Z",
+      "end": "2023-12-31T23:30Z",
+      "percentage_of_2023": 20.0
+    },
+    "test_set_2024": {
+      "rows": 17568,
+      "start": "2024-01-01T00:00Z",
+      "end": "2024-12-31T23:30Z",
+      "description": "Full out-of-sample 2024 test period"
+    }
+  },
+  "evaluation_assumptions": {
+    "forecasting_horizon": "Next half-hour (1 step ahead)",
+    "prediction_timing": "At start of interval T, actual reading for T-1 is finalized and available.",
+    "zero_future_leakage": "No observation at or after interval T is used as a predictor.",
+    "anomaly_treatment": "2023 modeled target contains verified historical outturn replacements for the 5 telemetry drops."
+  },
+  "validation_metrics_2023": {
+    "mae_gco2_per_kwh": 4.8039,
+    "rmse_gco2_per_kwh": 6.4704,
+    "r2_score": 0.9926
+  },
+  "test_metrics_2024": {
+    "mae_gco2_per_kwh": 4.1455,
+    "rmse_gco2_per_kwh": 5.6275,
+    "r2_score": 0.9912
+  },
+  "baseline_comparison_2024": {
+    "baseline_mae_gco2_per_kwh": 40.7313,
+    "model_mae_gco2_per_kwh": 4.1455,
+    "mae_improvement_percent": 89.82,
+    "baseline_rmse_gco2_per_kwh": 53.3597,
+    "model_rmse_gco2_per_kwh": 5.6275,
+    "rmse_improvement_percent": 89.45,
+    "baseline_r2": 0.205,
+    "model_r2": 0.9912,
+    "r2_improvement": 0.7862
+  },
+  "top_feature_importances": {
+    "lag_1_half_hour": 0.987335,
+    "lag_2_half_hour": 0.003729,
+    "rolling_mean_past_24h": 0.001113,
+    "settlement_period": 0.001072,
+    "lag_336_half_hour": 0.001069,
+    "rolling_std_past_24h": 0.000989,
+    "lag_48_half_hour": 0.000868,
+    "sin_period": 0.000823,
+    "cos_period": 0.000651,
+    "month": 0.000536,
+    "hour": 0.000508,
+    "sin_hour": 0.000388,
+    "sin_day_of_week": 0.000279,
+    "day_of_week": 0.000218,
+    "cos_hour": 0.000212,
+    "cos_day_of_week": 0.000181,
+    "is_weekend": 2.9e-05
+  }
+}
