@@ -160,7 +160,7 @@ class SchedulingEngine:
         for a given policy under identical resource and carbon conditions.
         """
         cluster = cluster_config or ClusterConfig()
-        
+
         cfg_eaf = SchedulerConfig(
             policy=policy,
             job_ordering=JobOrdering.EARLIEST_ARRIVAL_FIRST,

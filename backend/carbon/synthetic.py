@@ -69,7 +69,7 @@ class SyntheticCarbonDataProvider(CarbonDataProvider):
 
             # Secondary 12-hour harmonic (morning + evening peak)
             harmonic = 0.3 * math.sin((hour_of_day - 6) * 4 * math.pi / 24.0)
-            
+
             predicted = max(
                 10.0,
                 self.base_intensity + self.diurnal_amplitude * (diurnal_factor + harmonic)
