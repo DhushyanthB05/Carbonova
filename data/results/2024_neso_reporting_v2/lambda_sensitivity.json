@@ -1,0 +1,74 @@
+[
+  {
+    "lambda": 0.0,
+    "total_emissions_gco2e": 2209.42,
+    "emissions_reduction_vs_fifo_pct": 0.61,
+    "backfire_rate_pct": 33.33,
+    "mean_waiting_minutes": 21.0,
+    "deadline_success_pct": 100.0,
+    "oracle_gap_gco2e": 62.31
+  },
+  {
+    "lambda": 0.2,
+    "total_emissions_gco2e": 2209.42,
+    "emissions_reduction_vs_fifo_pct": 0.61,
+    "backfire_rate_pct": 33.33,
+    "mean_waiting_minutes": 21.0,
+    "deadline_success_pct": 100.0,
+    "oracle_gap_gco2e": 62.31
+  },
+  {
+    "lambda": 0.5,
+    "total_emissions_gco2e": 2209.42,
+    "emissions_reduction_vs_fifo_pct": 0.61,
+    "backfire_rate_pct": 33.33,
+    "mean_waiting_minutes": 21.0,
+    "deadline_success_pct": 100.0,
+    "oracle_gap_gco2e": 62.31
+  },
+  {
+    "lambda": 0.8,
+    "total_emissions_gco2e": 2209.42,
+    "emissions_reduction_vs_fifo_pct": 0.61,
+    "backfire_rate_pct": 33.33,
+    "mean_waiting_minutes": 21.0,
+    "deadline_success_pct": 100.0,
+    "oracle_gap_gco2e": 62.31
+  },
+  {
+    "lambda": 1.0,
+    "total_emissions_gco2e": 2209.42,
+    "emissions_reduction_vs_fifo_pct": 0.61,
+    "backfire_rate_pct": 33.33,
+    "mean_waiting_minutes": 21.0,
+    "deadline_success_pct": 100.0,
+    "oracle_gap_gco2e": 62.31
+  },
+  {
+    "lambda": 1.5,
+    "total_emissions_gco2e": 2209.42,
+    "emissions_reduction_vs_fifo_pct": 0.61,
+    "backfire_rate_pct": 33.33,
+    "mean_waiting_minutes": 21.0,
+    "deadline_success_pct": 100.0,
+    "oracle_gap_gco2e": 62.31
+  },
+  {
+    "lambda": 2.0,
+    "total_emissions_gco2e": 2209.42,
+    "emissions_reduction_vs_fifo_pct": 0.61,
+    "backfire_rate_pct": 33.33,
+    "mean_waiting_minutes": 21.0,
+    "deadline_success_pct": 100.0,
+    "oracle_gap_gco2e": 62.31
+  },
+  {
+    "lambda": 2.5,
+    "total_emissions_gco2e": 2209.42,
+    "emissions_reduction_vs_fifo_pct": 0.61,
+    "backfire_rate_pct": 33.33,
+    "mean_waiting_minutes": 21.0,
+    "deadline_success_pct": 100.0,
+    "oracle_gap_gco2e": 62.31
+  }
+]

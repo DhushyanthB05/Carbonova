@@ -1,0 +1,67 @@
+[
+  {
+    "noise_std": 0.0,
+    "naive_green": {
+      "total_emissions": 13307.4333,
+      "backfire_rate_pct": 7.69,
+      "realized_savings": 799.3
+    },
+    "carbonova": {
+      "total_emissions": 13307.4333,
+      "backfire_rate_pct": 7.69,
+      "realized_savings": 799.3
+    }
+  },
+  {
+    "noise_std": 25.0,
+    "naive_green": {
+      "total_emissions": 13327.8333,
+      "backfire_rate_pct": 7.69,
+      "realized_savings": 778.9
+    },
+    "carbonova": {
+      "total_emissions": 13327.8333,
+      "backfire_rate_pct": 7.69,
+      "realized_savings": 778.9
+    }
+  },
+  {
+    "noise_std": 50.0,
+    "naive_green": {
+      "total_emissions": 13277.3333,
+      "backfire_rate_pct": 7.69,
+      "realized_savings": 829.4
+    },
+    "carbonova": {
+      "total_emissions": 13277.3333,
+      "backfire_rate_pct": 7.69,
+      "realized_savings": 829.4
+    }
+  },
+  {
+    "noise_std": 75.0,
+    "naive_green": {
+      "total_emissions": 13468.8333,
+      "backfire_rate_pct": 37.5,
+      "realized_savings": -475.1
+    },
+    "carbonova": {
+      "total_emissions": 14353.6333,
+      "backfire_rate_pct": 37.5,
+      "realized_savings": -246.9
+    }
+  },
+  {
+    "noise_std": 100.0,
+    "naive_green": {
+      "total_emissions": 12810.9333,
+      "backfire_rate_pct": 10.0,
+      "realized_savings": 590.6
+    },
+    "carbonova": {
+      "total_emissions": 12810.9333,
+      "backfire_rate_pct": 10.0,
+      "realized_savings": 590.6
+    }
+  }
+]

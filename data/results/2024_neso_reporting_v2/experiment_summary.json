@@ -1,0 +1,642 @@
+{
+  "execution_timestamp_utc": "2026-10-26T22:31:25.543366+00:00",
+  "mode": "real_neso_2024",
+  "provenance": {
+    "provider_class": "NESORealTraceCarbonDataProvider",
+    "source_trace_csv": "uncertainty_predictions_2024.csv",
+    "provenance_source": "NESO_Great_Britain_Carbon_Intensity",
+    "region": "GB",
+    "unit": "gCO2/kWh",
+    "uncertainty_mode": "diurnal",
+    "diurnal_quantiles_gco2_per_kwh": {
+      "night_baseload": 11.283,
+      "morning_ramp": 9.3182,
+      "afternoon_solar": 8.276,
+      "evening_peak": 10.4554
+    },
+    "global_quantile_gco2_per_kwh": 9.7424
+  },
+  "time_window": {
+    "start": "2024-06-01T00:00:00+00:00",
+    "end": "2024-06-02T12:00:00+00:00",
+    "step_minutes": 60
+  },
+  "scheduler_configuration": {
+    "cluster_total_capacity": 2.0,
+    "time_step_minutes": 60,
+    "job_ordering": "earliest_arrival_first",
+    "risk_lambda": 1.0,
+    "min_improvement_margin": 0.0,
+    "margin_unit": "relative_percentage"
+  },
+  "random_seeds": {
+    "scenario_generation_seed": 42,
+    "forecast_noise_experiment_seed": 42,
+    "rolling_backtest_base_seed": 100
+  },
+  "output_artifact_paths": [
+    "standard_batch_comparison.json",
+    "resource_contention_comparison.json",
+    "tight_deadlines_comparison.json",
+    "urgent_only_comparison.json",
+    "dashboard_carbonova_payload.json",
+    "lambda_sensitivity.json",
+    "forecast_noise_sensitivity.json",
+    "rolling_backtest_report.json",
+    "experiment_summary.json"
+  ],
+  "methodology_and_reproducibility": {
+    "metrics_implementation": "backend.scheduler.metrics.compute_schedule_metrics",
+    "scheduling_engine_reference": "backend.scheduler.engine.SchedulingEngine",
+    "oracle_specification": "Online sequential greedy oracle with perfect ground-truth lookahead under identical job arrival ordering (not offline global MIP/ILP)",
+    "unexecuted_job_accounting": "Unscheduled jobs emit 0 gCO2e; throughput must be evaluated alongside raw emissions via completion_rate_pct and emissions_per_completed_kwh",
+    "specification_reference": "Carbonova Master Specification Section 9.1, 11.2, & 13.1"
+  },
+  "scenarios": {
+    "standard_batch_comparison": {
+      "file": "standard_batch_24h_2024.json",
+      "job_count": 20,
+      "summary": {
+        "fifo": {
+          "policy": "fifo",
+          "total_emissions_gco2e": 2223.08,
+          "emissions_reduction_vs_fifo_pct": 0.0,
+          "deadline_success_pct": 100.0,
+          "waiting_time_mean_minutes": 9.0,
+          "waiting_time_median_minutes": 0.0,
+          "waiting_time_max_minutes": 60.0,
+          "backfire_rate_pct": null,
+          "predicted_savings_gco2e": 0.0,
+          "realized_savings_gco2e": 0.0,
+          "oracle_gap_gco2e": 75.97,
+          "oracle_gap_pct": 3.54,
+          "scheduled_count": 20,
+          "unscheduled_count": 0,
+          "submitted_count": 20,
+          "completion_rate_pct": 100.0,
+          "total_energy_executed_kwh": 35.49,
+          "emissions_per_completed_kwh": 62.64
+        },
+        "naive_green": {
+          "policy": "naive_green",
+          "total_emissions_gco2e": 2054.19,
+          "emissions_reduction_vs_fifo_pct": 7.6,
+          "deadline_success_pct": 90.0,
+          "waiting_time_mean_minutes": 50.0,
+          "waiting_time_median_minutes": 60.0,
+          "waiting_time_max_minutes": 120.0,
+          "backfire_rate_pct": 33.33,
+          "predicted_savings_gco2e": 39.68,
+          "realized_savings_gco2e": 17.81,
+          "oracle_gap_gco2e": -92.92,
+          "oracle_gap_pct": -4.33,
+          "scheduled_count": 18,
+          "unscheduled_count": 2,
+          "submitted_count": 20,
+          "completion_rate_pct": 90.0,
+          "total_energy_executed_kwh": 33.04,
+          "emissions_per_completed_kwh": 62.17
+        },
+        "carbonova": {
+          "policy": "carbonova",
+          "total_emissions_gco2e": 2209.42,
+          "emissions_reduction_vs_fifo_pct": 0.61,
+          "deadline_success_pct": 100.0,
+          "waiting_time_mean_minutes": 21.0,
+          "waiting_time_median_minutes": 0.0,
+          "waiting_time_max_minutes": 120.0,
+          "backfire_rate_pct": 33.33,
+          "predicted_savings_gco2e": 32.47,
+          "realized_savings_gco2e": 13.66,
+          "oracle_gap_gco2e": 62.31,
+          "oracle_gap_pct": 2.9,
+          "scheduled_count": 20,
+          "unscheduled_count": 0,
+          "submitted_count": 20,
+          "completion_rate_pct": 100.0,
+          "total_energy_executed_kwh": 35.49,
+          "emissions_per_completed_kwh": 62.25
+        },
+        "oracle": {
+          "policy": "oracle",
+          "total_emissions_gco2e": 2147.11,
+          "emissions_reduction_vs_fifo_pct": 3.42,
+          "deadline_success_pct": 95.0,
+          "waiting_time_mean_minutes": 44.21,
+          "waiting_time_median_minutes": 60.0,
+          "waiting_time_max_minutes": 180.0,
+          "backfire_rate_pct": 0.0,
+          "predicted_savings_gco2e": 20.41,
+          "realized_savings_gco2e": 27.86,
+          "oracle_gap_gco2e": -0.01,
+          "oracle_gap_pct": -0.0,
+          "scheduled_count": 19,
+          "unscheduled_count": 1,
+          "submitted_count": 20,
+          "completion_rate_pct": 95.0,
+          "total_energy_executed_kwh": 34.76,
+          "emissions_per_completed_kwh": 61.77
+        },
+        "greedy_oracle": {
+          "policy": "greedy_oracle",
+          "total_emissions_gco2e": 2147.11,
+          "emissions_reduction_vs_fifo_pct": 3.42,
+          "deadline_success_pct": 95.0,
+          "waiting_time_mean_minutes": 44.21,
+          "waiting_time_median_minutes": 60.0,
+          "waiting_time_max_minutes": 180.0,
+          "backfire_rate_pct": 0.0,
+          "predicted_savings_gco2e": 20.41,
+          "realized_savings_gco2e": 27.86,
+          "oracle_gap_gco2e": -0.01,
+          "oracle_gap_pct": -0.0,
+          "scheduled_count": 19,
+          "unscheduled_count": 1,
+          "submitted_count": 20,
+          "completion_rate_pct": 95.0,
+          "total_energy_executed_kwh": 34.76,
+          "emissions_per_completed_kwh": 61.77
+        }
+      }
+    },
+    "resource_contention_comparison": {
+      "file": "resource_contention_18h_2024.json",
+      "job_count": 35,
+      "summary": {
+        "fifo": {
+          "policy": "fifo",
+          "total_emissions_gco2e": 3059.33,
+          "emissions_reduction_vs_fifo_pct": 0.0,
+          "deadline_success_pct": 40.0,
+          "waiting_time_mean_minutes": 162.86,
+          "waiting_time_median_minutes": 180.0,
+          "waiting_time_max_minutes": 300.0,
+          "backfire_rate_pct": null,
+          "predicted_savings_gco2e": 0.0,
+          "realized_savings_gco2e": 0.0,
+          "oracle_gap_gco2e": 551.96,
+          "oracle_gap_pct": 22.01,
+          "scheduled_count": 14,
+          "unscheduled_count": 21,
+          "submitted_count": 35,
+          "completion_rate_pct": 40.0,
+          "total_energy_executed_kwh": 55.87,
+          "emissions_per_completed_kwh": 54.76
+        },
+        "naive_green": {
+          "policy": "naive_green",
+          "total_emissions_gco2e": 2507.37,
+          "emissions_reduction_vs_fifo_pct": 18.04,
+          "deadline_success_pct": 40.0,
+          "waiting_time_mean_minutes": 205.71,
+          "waiting_time_median_minutes": 180.0,
+          "waiting_time_max_minutes": 480.0,
+          "backfire_rate_pct": 0.0,
+          "predicted_savings_gco2e": 91.19,
+          "realized_savings_gco2e": 91.91,
+          "oracle_gap_gco2e": 0.0,
+          "oracle_gap_pct": 0.0,
+          "scheduled_count": 14,
+          "unscheduled_count": 21,
+          "submitted_count": 35,
+          "completion_rate_pct": 40.0,
+          "total_energy_executed_kwh": 46.91,
+          "emissions_per_completed_kwh": 53.45
+        },
+        "carbonova": {
+          "policy": "carbonova",
+          "total_emissions_gco2e": 2909.61,
+          "emissions_reduction_vs_fifo_pct": 4.89,
+          "deadline_success_pct": 48.57,
+          "waiting_time_mean_minutes": 137.65,
+          "waiting_time_median_minutes": 60.0,
+          "waiting_time_max_minutes": 480.0,
+          "backfire_rate_pct": 0.0,
+          "predicted_savings_gco2e": 173.58,
+          "realized_savings_gco2e": 145.27,
+          "oracle_gap_gco2e": 402.24,
+          "oracle_gap_pct": 16.04,
+          "scheduled_count": 17,
+          "unscheduled_count": 18,
+          "submitted_count": 35,
+          "completion_rate_pct": 48.57,
+          "total_energy_executed_kwh": 53.01,
+          "emissions_per_completed_kwh": 54.89
+        },
+        "oracle": {
+          "policy": "oracle",
+          "total_emissions_gco2e": 2507.37,
+          "emissions_reduction_vs_fifo_pct": 18.04,
+          "deadline_success_pct": 40.0,
+          "waiting_time_mean_minutes": 205.71,
+          "waiting_time_median_minutes": 180.0,
+          "waiting_time_max_minutes": 480.0,
+          "backfire_rate_pct": 0.0,
+          "predicted_savings_gco2e": 91.19,
+          "realized_savings_gco2e": 91.91,
+          "oracle_gap_gco2e": 0.0,
+          "oracle_gap_pct": 0.0,
+          "scheduled_count": 14,
+          "unscheduled_count": 21,
+          "submitted_count": 35,
+          "completion_rate_pct": 40.0,
+          "total_energy_executed_kwh": 46.91,
+          "emissions_per_completed_kwh": 53.45
+        },
+        "greedy_oracle": {
+          "policy": "greedy_oracle",
+          "total_emissions_gco2e": 2507.37,
+          "emissions_reduction_vs_fifo_pct": 18.04,
+          "deadline_success_pct": 40.0,
+          "waiting_time_mean_minutes": 205.71,
+          "waiting_time_median_minutes": 180.0,
+          "waiting_time_max_minutes": 480.0,
+          "backfire_rate_pct": 0.0,
+          "predicted_savings_gco2e": 91.19,
+          "realized_savings_gco2e": 91.91,
+          "oracle_gap_gco2e": 0.0,
+          "oracle_gap_pct": 0.0,
+          "scheduled_count": 14,
+          "unscheduled_count": 21,
+          "submitted_count": 35,
+          "completion_rate_pct": 40.0,
+          "total_energy_executed_kwh": 46.91,
+          "emissions_per_completed_kwh": 53.45
+        }
+      }
+    },
+    "tight_deadlines_comparison": {
+      "file": "tight_deadlines_24h_2024.json",
+      "job_count": 20,
+      "summary": {
+        "fifo": {
+          "policy": "fifo",
+          "total_emissions_gco2e": 2165.12,
+          "emissions_reduction_vs_fifo_pct": -0.0,
+          "deadline_success_pct": 95.0,
+          "waiting_time_mean_minutes": 18.95,
+          "waiting_time_median_minutes": 0.0,
+          "waiting_time_max_minutes": 60.0,
+          "backfire_rate_pct": null,
+          "predicted_savings_gco2e": 0.0,
+          "realized_savings_gco2e": 0.0,
+          "oracle_gap_gco2e": 205.06,
+          "oracle_gap_pct": 10.46,
+          "scheduled_count": 19,
+          "unscheduled_count": 1,
+          "submitted_count": 20,
+          "completion_rate_pct": 95.0,
+          "total_energy_executed_kwh": 30.97,
+          "emissions_per_completed_kwh": 69.91
+        },
+        "naive_green": {
+          "policy": "naive_green",
+          "total_emissions_gco2e": 1947.8,
+          "emissions_reduction_vs_fifo_pct": 10.04,
+          "deadline_success_pct": 90.0,
+          "waiting_time_mean_minutes": 30.0,
+          "waiting_time_median_minutes": 30.0,
+          "waiting_time_max_minutes": 60.0,
+          "backfire_rate_pct": 16.67,
+          "predicted_savings_gco2e": 15.82,
+          "realized_savings_gco2e": 14.75,
+          "oracle_gap_gco2e": -12.26,
+          "oracle_gap_pct": -0.63,
+          "scheduled_count": 18,
+          "unscheduled_count": 2,
+          "submitted_count": 20,
+          "completion_rate_pct": 90.0,
+          "total_energy_executed_kwh": 27.96,
+          "emissions_per_completed_kwh": 69.66
+        },
+        "carbonova": {
+          "policy": "carbonova",
+          "total_emissions_gco2e": 2145.24,
+          "emissions_reduction_vs_fifo_pct": 0.92,
+          "deadline_success_pct": 95.0,
+          "waiting_time_mean_minutes": 22.11,
+          "waiting_time_median_minutes": 0.0,
+          "waiting_time_max_minutes": 60.0,
+          "backfire_rate_pct": 50.0,
+          "predicted_savings_gco2e": 9.51,
+          "realized_savings_gco2e": 2.39,
+          "oracle_gap_gco2e": 185.18,
+          "oracle_gap_pct": 9.45,
+          "scheduled_count": 19,
+          "unscheduled_count": 1,
+          "submitted_count": 20,
+          "completion_rate_pct": 95.0,
+          "total_energy_executed_kwh": 30.97,
+          "emissions_per_completed_kwh": 69.27
+        },
+        "oracle": {
+          "policy": "oracle",
+          "total_emissions_gco2e": 1960.06,
+          "emissions_reduction_vs_fifo_pct": 9.47,
+          "deadline_success_pct": 90.0,
+          "waiting_time_mean_minutes": 30.0,
+          "waiting_time_median_minutes": 30.0,
+          "waiting_time_max_minutes": 60.0,
+          "backfire_rate_pct": 0.0,
+          "predicted_savings_gco2e": 7.57,
+          "realized_savings_gco2e": 19.23,
+          "oracle_gap_gco2e": 0.0,
+          "oracle_gap_pct": -0.0,
+          "scheduled_count": 18,
+          "unscheduled_count": 2,
+          "submitted_count": 20,
+          "completion_rate_pct": 90.0,
+          "total_energy_executed_kwh": 27.96,
+          "emissions_per_completed_kwh": 70.1
+        },
+        "greedy_oracle": {
+          "policy": "greedy_oracle",
+          "total_emissions_gco2e": 1960.06,
+          "emissions_reduction_vs_fifo_pct": 9.47,
+          "deadline_success_pct": 90.0,
+          "waiting_time_mean_minutes": 30.0,
+          "waiting_time_median_minutes": 30.0,
+          "waiting_time_max_minutes": 60.0,
+          "backfire_rate_pct": 0.0,
+          "predicted_savings_gco2e": 7.57,
+          "realized_savings_gco2e": 19.23,
+          "oracle_gap_gco2e": 0.0,
+          "oracle_gap_pct": -0.0,
+          "scheduled_count": 18,
+          "unscheduled_count": 2,
+          "submitted_count": 20,
+          "completion_rate_pct": 90.0,
+          "total_energy_executed_kwh": 27.96,
+          "emissions_per_completed_kwh": 70.1
+        }
+      }
+    },
+    "urgent_only_comparison": {
+      "file": "urgent_only_24h_2024.json",
+      "job_count": 15,
+      "summary": {
+        "fifo": {
+          "policy": "fifo",
+          "total_emissions_gco2e": 1387.06,
+          "emissions_reduction_vs_fifo_pct": 0.0,
+          "deadline_success_pct": 80.0,
+          "waiting_time_mean_minutes": 0.0,
+          "waiting_time_median_minutes": 0.0,
+          "waiting_time_max_minutes": 0.0,
+          "backfire_rate_pct": null,
+          "predicted_savings_gco2e": 0.0,
+          "realized_savings_gco2e": 0.0,
+          "oracle_gap_gco2e": 0.0,
+          "oracle_gap_pct": -0.0,
+          "scheduled_count": 12,
+          "unscheduled_count": 3,
+          "submitted_count": 15,
+          "completion_rate_pct": 80.0,
+          "total_energy_executed_kwh": 19.6,
+          "emissions_per_completed_kwh": 70.77
+        },
+        "naive_green": {
+          "policy": "naive_green",
+          "total_emissions_gco2e": 1387.06,
+          "emissions_reduction_vs_fifo_pct": 0.0,
+          "deadline_success_pct": 80.0,
+          "waiting_time_mean_minutes": 0.0,
+          "waiting_time_median_minutes": 0.0,
+          "waiting_time_max_minutes": 0.0,
+          "backfire_rate_pct": null,
+          "predicted_savings_gco2e": 0.0,
+          "realized_savings_gco2e": 0.0,
+          "oracle_gap_gco2e": 0.0,
+          "oracle_gap_pct": -0.0,
+          "scheduled_count": 12,
+          "unscheduled_count": 3,
+          "submitted_count": 15,
+          "completion_rate_pct": 80.0,
+          "total_energy_executed_kwh": 19.6,
+          "emissions_per_completed_kwh": 70.77
+        },
+        "carbonova": {
+          "policy": "carbonova",
+          "total_emissions_gco2e": 1387.06,
+          "emissions_reduction_vs_fifo_pct": 0.0,
+          "deadline_success_pct": 80.0,
+          "waiting_time_mean_minutes": 0.0,
+          "waiting_time_median_minutes": 0.0,
+          "waiting_time_max_minutes": 0.0,
+          "backfire_rate_pct": null,
+          "predicted_savings_gco2e": 0.0,
+          "realized_savings_gco2e": 0.0,
+          "oracle_gap_gco2e": 0.0,
+          "oracle_gap_pct": -0.0,
+          "scheduled_count": 12,
+          "unscheduled_count": 3,
+          "submitted_count": 15,
+          "completion_rate_pct": 80.0,
+          "total_energy_executed_kwh": 19.6,
+          "emissions_per_completed_kwh": 70.77
+        },
+        "oracle": {
+          "policy": "oracle",
+          "total_emissions_gco2e": 1387.06,
+          "emissions_reduction_vs_fifo_pct": 0.0,
+          "deadline_success_pct": 80.0,
+          "waiting_time_mean_minutes": 0.0,
+          "waiting_time_median_minutes": 0.0,
+          "waiting_time_max_minutes": 0.0,
+          "backfire_rate_pct": null,
+          "predicted_savings_gco2e": 0.0,
+          "realized_savings_gco2e": 0.0,
+          "oracle_gap_gco2e": 0.0,
+          "oracle_gap_pct": -0.0,
+          "scheduled_count": 12,
+          "unscheduled_count": 3,
+          "submitted_count": 15,
+          "completion_rate_pct": 80.0,
+          "total_energy_executed_kwh": 19.6,
+          "emissions_per_completed_kwh": 70.77
+        },
+        "greedy_oracle": {
+          "policy": "greedy_oracle",
+          "total_emissions_gco2e": 1387.06,
+          "emissions_reduction_vs_fifo_pct": 0.0,
+          "deadline_success_pct": 80.0,
+          "waiting_time_mean_minutes": 0.0,
+          "waiting_time_median_minutes": 0.0,
+          "waiting_time_max_minutes": 0.0,
+          "backfire_rate_pct": null,
+          "predicted_savings_gco2e": 0.0,
+          "realized_savings_gco2e": 0.0,
+          "oracle_gap_gco2e": 0.0,
+          "oracle_gap_pct": -0.0,
+          "scheduled_count": 12,
+          "unscheduled_count": 3,
+          "submitted_count": 15,
+          "completion_rate_pct": 80.0,
+          "total_energy_executed_kwh": 19.6,
+          "emissions_per_completed_kwh": 70.77
+        }
+      }
+    }
+  },
+  "backtest_summary": {
+    "window_count": 24,
+    "policy_aggregates": {
+      "fifo": {
+        "policy": "fifo",
+        "total_emissions_gco2e": {
+          "mean": 3200.85,
+          "std": 909.33,
+          "min": 1892.62,
+          "max": 5491.16
+        },
+        "emissions_reduction_pct": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.0
+        },
+        "backfire_rate_pct": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.0
+        },
+        "mean_waiting_minutes": {
+          "mean": 11.7,
+          "std": 8.7,
+          "min": 0.0,
+          "max": 36.92
+        },
+        "realized_savings_gco2e": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.0
+        },
+        "oracle_gap_gco2e": {
+          "mean": 432.02,
+          "std": 333.85,
+          "min": 11.55,
+          "max": 1181.3
+        }
+      },
+      "naive_green": {
+        "policy": "naive_green",
+        "total_emissions_gco2e": {
+          "mean": 2768.81,
+          "std": 791.28,
+          "min": 1762.84,
+          "max": 4692.94
+        },
+        "emissions_reduction_pct": {
+          "mean": 12.88,
+          "std": 9.3,
+          "min": 0.25,
+          "max": 35.37
+        },
+        "backfire_rate_pct": {
+          "mean": 8.89,
+          "std": 13.15,
+          "min": 0.0,
+          "max": 50.0
+        },
+        "mean_waiting_minutes": {
+          "mean": 68.92,
+          "std": 22.07,
+          "min": 20.0,
+          "max": 114.55
+        },
+        "realized_savings_gco2e": {
+          "mean": 244.71,
+          "std": 180.36,
+          "min": 11.55,
+          "max": 675.17
+        },
+        "oracle_gap_gco2e": {
+          "mean": -0.01,
+          "std": 60.93,
+          "min": -211.89,
+          "max": 146.48
+        }
+      },
+      "carbonova": {
+        "policy": "carbonova",
+        "total_emissions_gco2e": {
+          "mean": 2853.32,
+          "std": 919.7,
+          "min": 1769.62,
+          "max": 5436.14
+        },
+        "emissions_reduction_pct": {
+          "mean": 10.94,
+          "std": 9.18,
+          "min": -0.0,
+          "max": 35.47
+        },
+        "backfire_rate_pct": {
+          "mean": 1.59,
+          "std": 5.19,
+          "min": 0.0,
+          "max": 20.0
+        },
+        "mean_waiting_minutes": {
+          "mean": 59.6,
+          "std": 23.71,
+          "min": 20.0,
+          "max": 100.0
+        },
+        "realized_savings_gco2e": {
+          "mean": 243.17,
+          "std": 180.94,
+          "min": 0.0,
+          "max": 690.87
+        },
+        "oracle_gap_gco2e": {
+          "mean": 84.5,
+          "std": 168.51,
+          "min": -61.08,
+          "max": 783.24
+        }
+      },
+      "greedy_oracle": {
+        "policy": "greedy_oracle",
+        "total_emissions_gco2e": {
+          "mean": 2768.83,
+          "std": 823.33,
+          "min": 1616.36,
+          "max": 4664.73
+        },
+        "emissions_reduction_pct": {
+          "mean": 13.21,
+          "std": 9.03,
+          "min": 0.33,
+          "max": 35.49
+        },
+        "backfire_rate_pct": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.0
+        },
+        "mean_waiting_minutes": {
+          "mean": 70.11,
+          "std": 24.51,
+          "min": 24.0,
+          "max": 135.0
+        },
+        "realized_savings_gco2e": {
+          "mean": 253.69,
+          "std": 179.16,
+          "min": 14.47,
+          "max": 682.89
+        },
+        "oracle_gap_gco2e": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.01
+        }
+      }
+    }
+  }
+}

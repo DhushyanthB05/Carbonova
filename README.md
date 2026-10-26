@@ -30,10 +30,16 @@ Carbonova/
 │   ├── app/
 │   ├── carbon/
 │   ├── scheduler/
+│   ├── evaluation/
 │   └── tests/
 ├── frontend/
 ├── data/
+│   ├── carbon_trace.csv
+│   ├── scenarios/
+│   └── results/
 ├── .gitignore
+├── pytest.ini
+├── requirements.txt
 └── README.md
 ```
 
@@ -43,11 +49,40 @@ Carbon intensity data, forecasts, and workload energy estimates will be document
 
 ## Development Status
 
-Initial project structure established. Backend APIs, scheduling algorithms, evaluation pipeline, tests, and dashboard will be developed incrementally.
+- Core scheduler models, feasibility engine, baselines, and uncertainty-aware heuristic implemented.
+- Reproducible job scenario generator, 4-policy benchmark runner, and sensitivity experiments implemented.
+- Automated test suite with 17 passing tests established.
 
 ## Getting Started
 
-Setup and execution instructions will be added as the implementation progresses.
+### 1. Environment Setup
+
+```bash
+# Create virtual environment
+python -m venv .venv
+
+# Activate virtual environment (Windows PowerShell)
+.\.venv\Scripts\Activate.ps1
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+### 2. Run Automated Pytest Suite
+
+```bash
+pytest -v
+```
+
+### 3. Run Reproducible Evaluation Benchmarks & Sensitivity Experiments
+
+```bash
+python backend/evaluation/run_experiments.py
+```
+
+Generated reproducible scenarios and comparison outputs will be stored in:
+- `data/scenarios/` (Standard 24h, Contention, Tight Deadlines, Urgent Control)
+- `data/results/` (Policy comparison report, frontend dashboard payload, sensitivity sweeps)
 
 ## Project Goal
 
