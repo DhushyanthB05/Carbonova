@@ -14,6 +14,7 @@ from datetime import datetime, timedelta, timezone
 from typing import List, Optional
 
 from backend.carbon.interface import CarbonDataProvider, CarbonForecastPoint, CarbonGrid
+from backend.scheduler.time_grid import align_to_next_slot, align_to_prev_slot
 
 
 class SyntheticCarbonDataProvider(CarbonDataProvider):
@@ -57,12 +58,18 @@ class SyntheticCarbonDataProvider(CarbonDataProvider):
         start_utc = start_time if start_time.tzinfo else start_time.replace(tzinfo=timezone.utc)
         end_utc = end_time if end_time.tzinfo else end_time.replace(tzinfo=timezone.utc)
 
+        # Align start and end to discrete slot boundaries matching scheduler conventions
+        start_aligned = align_to_prev_slot(start_utc, time_step_minutes)
+        end_aligned = align_to_next_slot(end_utc, time_step_minutes)
+        if start_aligned >= end_aligned:
+            end_aligned = start_aligned + timedelta(minutes=time_step_minutes)
+
         points: List[CarbonForecastPoint] = []
         step = timedelta(minutes=time_step_minutes)
-        current = start_utc
+        current = start_aligned
         slot_index = 0
 
-        while current <= end_utc:
+        while current < end_aligned:
             # Solar/diurnal cycle: Peak at ~09:00 and 19:00, trough at 13:00 (solar) and 03:00 (night)
             hour_of_day = current.hour + current.minute / 60.0
             diurnal_factor = math.sin((hour_of_day - 9) * 2 * math.pi / 24.0)

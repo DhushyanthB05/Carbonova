@@ -96,7 +96,7 @@ def evaluate_job_feasibility(
 
     candidates = get_candidate_start_slots(job, carbon_grid, time_step_minutes)
     if not candidates:
-        return FeasibilityStatus.CAPACITY_INFEASIBLE, [], "No valid time slots found within job deadline window in carbon grid."
+        return FeasibilityStatus.INITIALLY_INFEASIBLE, [], "Insufficient carbon forecast coverage within job deadline window."
 
     required_slots = calculate_required_slots(job.duration_minutes, time_step_minutes)
     feasible_slots = [

@@ -61,24 +61,26 @@ def get_candidate_start_slots(
 ) -> List[datetime]:
     """
     Generates all candidate start slot timestamps for a job that satisfy:
-    1. start_slot >= arrival_time (aligned to slot grid)
+    1. start_slot >= arrival_time (on the grid's discrete slot boundaries)
     2. start_slot + job.duration_timedelta <= deadline (job completes before or at deadline)
-    3. All required execution capacity slots exist in the carbon grid.
+    3. All required execution capacity slots exist contiguously in the carbon grid.
 
     Returns an ordered list of valid start datetimes.
     """
-    step = timedelta(minutes=time_step_minutes)
     required_slots = calculate_required_slots(job.duration_minutes, time_step_minutes)
-
-    earliest_start = align_to_next_slot(job.arrival_time, time_step_minutes)
     candidates: List[datetime] = []
 
-    current = earliest_start
-    while (current + job.duration_timedelta) <= job.deadline:
-        # Check if the full duration capacity slots are present in the carbon grid
-        slots = carbon_grid.get_interval_points(current, required_slots)
+    for p in carbon_grid.points:
+        slot = p.timestamp
+        # Slot cannot start before job has arrived
+        if slot < job.arrival_time:
+            continue
+        # Job must finish on or before its deadline
+        if (slot + job.duration_timedelta) > job.deadline:
+            continue
+        # Verify all contiguous slots required for execution capacity are present in grid
+        slots = carbon_grid.get_interval_points(slot, required_slots)
         if len(slots) == required_slots:
-            candidates.append(current)
-        current += step
+            candidates.append(slot)
 
     return candidates
