@@ -227,27 +227,33 @@ def run_naive_green_policy(
         best_pred = earliest_pred
         best_unc = earliest_unc
 
-        for slot in feasible_slots:
-            pred_ci, unc = compute_forecast_interval_stats(carbon_grid, slot, req_slots)
-            if pred_ci < best_pred:
-                best_pred = pred_ci
-                best_slot = slot
-                best_unc = unc
+        if not job.deferrable:
+            reason = "Non-deferrable job executed immediately at earliest feasible slot under Naive-Green policy."
+            score_diff = 0.0
+            improvement_pct = 0.0
+        else:
+            for slot in feasible_slots:
+                pred_ci, unc = compute_forecast_interval_stats(carbon_grid, slot, req_slots)
+                if pred_ci < best_pred:
+                    best_pred = pred_ci
+                    best_slot = slot
+                    best_unc = unc
+
+            waiting_min = (best_slot - job.arrival_time).total_seconds() / 60.0
+            score_diff = max(0.0, earliest_pred - best_pred)
+            improvement_pct = ((score_diff / earliest_pred) * 100.0) if earliest_pred > 0 else 0.0
+
+            if best_slot == earliest_start:
+                reason = "Selected earliest feasible slot (predicted carbon intensity is optimal or tied)."
+            else:
+                reason = (
+                    f"Delayed by {waiting_min:.0f}m to slot {best_slot.strftime('%H:%M')} for lower predicted "
+                    f"carbon intensity ({best_pred:.1f} vs {earliest_pred:.1f} gCO2eq/kWh, reduction: {improvement_pct:.1f}%)."
+                )
 
         chosen_finish = best_slot + job.duration_timedelta
         tracker.reserve(job.job_id, best_slot, req_slots, job.resource_requirement)
-
         waiting_min = (best_slot - job.arrival_time).total_seconds() / 60.0
-        score_diff = max(0.0, earliest_pred - best_pred)
-        improvement_pct = ((score_diff / earliest_pred) * 100.0) if earliest_pred > 0 else 0.0
-
-        if best_slot == earliest_start:
-            reason = "Selected earliest feasible slot (predicted carbon intensity is optimal or tied)."
-        else:
-            reason = (
-                f"Delayed by {waiting_min:.0f}m to slot {best_slot.strftime('%H:%M')} for lower predicted "
-                f"carbon intensity ({best_pred:.1f} vs {earliest_pred:.1f} gCO2eq/kWh, reduction: {improvement_pct:.1f}%)."
-            )
 
         decisions.append(
             DecisionRecord(
@@ -468,29 +474,34 @@ def run_oracle_policy(
         best_pred = e_pred
         best_unc = e_unc
 
-        for slot in feasible_slots:
-            real = compute_realized_interval_stats(carbon_grid, slot, req_slots)
-            pred, unc = compute_forecast_interval_stats(carbon_grid, slot, req_slots)
-            if real < best_real:
-                best_real = real
-                best_slot = slot
-                best_pred = pred
-                best_unc = unc
+        if not job.deferrable:
+            reason = "Non-deferrable job executed immediately at earliest feasible slot under Oracle policy."
+            score_diff = 0.0
+            improvement = 0.0
+        else:
+            for slot in feasible_slots:
+                real = compute_realized_interval_stats(carbon_grid, slot, req_slots)
+                pred, unc = compute_forecast_interval_stats(carbon_grid, slot, req_slots)
+                if real < best_real:
+                    best_real = real
+                    best_slot = slot
+                    best_pred = pred
+                    best_unc = unc
+
+            score_diff = max(0.0, e_real - best_real)
+            improvement = ((score_diff / e_real) * 100.0) if e_real > 0 else 0.0
+
+            if best_slot == earliest_start:
+                reason = "Oracle selected earliest slot: lowest realized carbon intensity."
+            else:
+                reason = (
+                    f"Oracle selected slot {best_slot.strftime('%H:%M')} with realized carbon intensity "
+                    f"{best_real:.1f} gCO2eq/kWh (saved {improvement:.1f}% vs earliest slot realized {e_real:.1f} gCO2eq/kWh)."
+                )
 
         chosen_finish = best_slot + job.duration_timedelta
         tracker.reserve(job.job_id, best_slot, req_slots, job.resource_requirement)
-
         waiting_min = (best_slot - job.arrival_time).total_seconds() / 60.0
-        score_diff = max(0.0, e_real - best_real)
-        improvement = ((score_diff / e_real) * 100.0) if e_real > 0 else 0.0
-
-        if best_slot == earliest_start:
-            reason = "Oracle selected earliest slot: lowest realized carbon intensity."
-        else:
-            reason = (
-                f"Oracle selected slot {best_slot.strftime('%H:%M')} with realized carbon intensity "
-                f"{best_real:.1f} gCO2eq/kWh (saved {improvement:.1f}% vs earliest slot realized {e_real:.1f} gCO2eq/kWh)."
-            )
 
         decisions.append(
             DecisionRecord(

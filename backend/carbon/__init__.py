@@ -8,6 +8,7 @@ from backend.carbon.interface import (
     CarbonForecastPoint,
     CarbonGrid,
 )
+from backend.carbon.neso_provider import NESORealTraceCarbonDataProvider
 from backend.carbon.synthetic import (
     SyntheticCarbonDataProvider,
     create_mock_carbon_grid,
@@ -17,6 +18,7 @@ __all__ = [
     "CarbonDataProvider",
     "CarbonForecastPoint",
     "CarbonGrid",
+    "NESORealTraceCarbonDataProvider",
     "SyntheticCarbonDataProvider",
     "create_mock_carbon_grid",
 ]

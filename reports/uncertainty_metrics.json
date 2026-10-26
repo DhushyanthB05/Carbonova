@@ -1,0 +1,201 @@
+{
+  "method": "Split Conformal Prediction",
+  "target_variable": "modeled_intensity_gco2_per_kwh",
+  "nominal_coverage_percent": 90.0,
+  "alpha": 0.09999999999999998,
+  "conformal_calibration_details": {
+    "calibration_dataset": "data/carbon_trace_2023_modeling.csv (Nov 25 12:00Z -> Dec 31 23:30Z)",
+    "sample_size_n": 1752,
+    "finite_sample_rank_k": 1578,
+    "empirical_quantile_p": 0.900685,
+    "quantile_half_width_q_hat_gco2_per_kwh": 9.7424,
+    "interval_full_width_gco2_per_kwh": 19.4847
+  },
+  "chronological_partitions": {
+    "model_fitting_2023": {
+      "start": "2023-01-01T00:00Z",
+      "end": "2023-10-19T23:30Z",
+      "rows": 14016,
+      "share": 0.8
+    },
+    "validation_2023": {
+      "start": "2023-10-20T00:00Z",
+      "end": "2023-11-25T11:30Z",
+      "rows": 1752,
+      "share": 0.1
+    },
+    "calibration_2023": {
+      "start": "2023-11-25T12:00Z",
+      "end": "2023-12-31T23:30Z",
+      "rows": 1752,
+      "share": 0.1
+    },
+    "test_2024": {
+      "start": "2024-01-01T00:00Z",
+      "end": "2024-12-31T23:30Z",
+      "rows": 17568,
+      "share": 1.0
+    }
+  },
+  "evaluation_2024_summary": {
+    "evaluated_rows": 17568,
+    "point_mae_gco2_per_kwh": 4.1455,
+    "point_rmse_gco2_per_kwh": 5.6275,
+    "empirical_coverage_percent": 92.4,
+    "covered_intervals": 16232,
+    "average_interval_width_gco2_per_kwh": 19.4847,
+    "bounds_ordered_correctly": true,
+    "minimum_lower_bound_gco2_per_kwh": 23.1321,
+    "negative_lower_bounds_count": 0,
+    "clipping_applied": false
+  },
+  "monthly_empirical_coverage_2024": {
+    "01_January": {
+      "month_number": 1,
+      "month_name": "January",
+      "total_intervals": 1488,
+      "covered_intervals": 1350,
+      "empirical_coverage_percent": 90.73,
+      "mae_gco2_per_kwh": 4.5993
+    },
+    "02_February": {
+      "month_number": 2,
+      "month_name": "February",
+      "total_intervals": 1392,
+      "covered_intervals": 1275,
+      "empirical_coverage_percent": 91.59,
+      "mae_gco2_per_kwh": 4.332
+    },
+    "03_March": {
+      "month_number": 3,
+      "month_name": "March",
+      "total_intervals": 1488,
+      "covered_intervals": 1349,
+      "empirical_coverage_percent": 90.66,
+      "mae_gco2_per_kwh": 4.4206
+    },
+    "04_April": {
+      "month_number": 4,
+      "month_name": "April",
+      "total_intervals": 1440,
+      "covered_intervals": 1310,
+      "empirical_coverage_percent": 90.97,
+      "mae_gco2_per_kwh": 4.3847
+    },
+    "05_May": {
+      "month_number": 5,
+      "month_name": "May",
+      "total_intervals": 1488,
+      "covered_intervals": 1400,
+      "empirical_coverage_percent": 94.09,
+      "mae_gco2_per_kwh": 3.6758
+    },
+    "06_June": {
+      "month_number": 6,
+      "month_name": "June",
+      "total_intervals": 1440,
+      "covered_intervals": 1369,
+      "empirical_coverage_percent": 95.07,
+      "mae_gco2_per_kwh": 3.5811
+    },
+    "07_July": {
+      "month_number": 7,
+      "month_name": "July",
+      "total_intervals": 1488,
+      "covered_intervals": 1386,
+      "empirical_coverage_percent": 93.15,
+      "mae_gco2_per_kwh": 4.0295
+    },
+    "08_August": {
+      "month_number": 8,
+      "month_name": "August",
+      "total_intervals": 1488,
+      "covered_intervals": 1386,
+      "empirical_coverage_percent": 93.15,
+      "mae_gco2_per_kwh": 4.0357
+    },
+    "09_September": {
+      "month_number": 9,
+      "month_name": "September",
+      "total_intervals": 1440,
+      "covered_intervals": 1345,
+      "empirical_coverage_percent": 93.4,
+      "mae_gco2_per_kwh": 4.0475
+    },
+    "10_October": {
+      "month_number": 10,
+      "month_name": "October",
+      "total_intervals": 1488,
+      "covered_intervals": 1365,
+      "empirical_coverage_percent": 91.73,
+      "mae_gco2_per_kwh": 4.2025
+    },
+    "11_November": {
+      "month_number": 11,
+      "month_name": "November",
+      "total_intervals": 1440,
+      "covered_intervals": 1338,
+      "empirical_coverage_percent": 92.92,
+      "mae_gco2_per_kwh": 4.1137
+    },
+    "12_December": {
+      "month_number": 12,
+      "month_name": "December",
+      "total_intervals": 1488,
+      "covered_intervals": 1359,
+      "empirical_coverage_percent": 91.33,
+      "mae_gco2_per_kwh": 4.3203
+    }
+  },
+  "theoretical_assumptions_and_limitations": {
+    "exchangeability_assumption": "Split conformal prediction guarantees marginal coverage (>= 1 - alpha) under the assumption that calibration and test residuals are exchangeable (drawn from the same joint distribution).",
+    "time_series_limitations": [
+      "Temporal Autocorrelation: Carbon intensity errors exhibit serial dependence; error bursts cluster during anomalous weather fronts.",
+      "Diurnal & Seasonal Heteroskedasticity: Prediction variance is higher during midday solar and evening demand ramps than overnight base-load periods.",
+      "Grid Structural Shift: Increasing renewable capacity (wind, solar) and coal phase-out alter generation distributions between 2023 and 2024.",
+      "Marginal vs Conditional Coverage: Coverage is guaranteed marginally across the distribution, not necessarily conditionally on every specific sub-regime or extreme wind lull."
+    ],
+    "validity_statement": "Prediction intervals provide empirical coverage based on finite-sample conformal calibration; they do not provide unconditional mathematical guarantees under arbitrary non-stationary distribution shifts."
+  },
+  "slot_specific_diurnal_calibration": {
+    "grouping_method": "diurnal_grid_regime",
+    "description": "Statistically defensible time-of-day grouping with n >= 360 calibration samples per group and global fallback.",
+    "groups": {
+      "night_baseload": {
+        "settlement_periods": "1-13 (00:00 - 06:30 UTC)",
+        "sample_size_n": 468,
+        "finite_sample_rank_k": 423,
+        "quantile_half_width_q_hat_gco2_per_kwh": 11.283,
+        "interval_full_width_gco2_per_kwh": 22.566,
+        "test_coverage_2024_percent": 93.61
+      },
+      "morning_ramp": {
+        "settlement_periods": "14-23 (07:00 - 11:30 UTC)",
+        "sample_size_n": 360,
+        "finite_sample_rank_k": 325,
+        "quantile_half_width_q_hat_gco2_per_kwh": 9.3182,
+        "interval_full_width_gco2_per_kwh": 18.6364,
+        "test_coverage_2024_percent": 92.87
+      },
+      "afternoon_solar": {
+        "settlement_periods": "24-33 (12:00 - 16:30 UTC)",
+        "sample_size_n": 369,
+        "finite_sample_rank_k": 333,
+        "quantile_half_width_q_hat_gco2_per_kwh": 8.276,
+        "interval_full_width_gco2_per_kwh": 16.552,
+        "test_coverage_2024_percent": 90.6
+      },
+      "evening_peak": {
+        "settlement_periods": "34-48 (17:00 - 23:30 UTC)",
+        "sample_size_n": 555,
+        "finite_sample_rank_k": 501,
+        "quantile_half_width_q_hat_gco2_per_kwh": 10.4554,
+        "interval_full_width_gco2_per_kwh": 20.9108,
+        "test_coverage_2024_percent": 92.82
+      }
+    },
+    "overall_slot_specific_coverage_2024_percent": 92.58,
+    "overall_average_interval_width_gco2_per_kwh": 19.9771,
+    "fallback_threshold_minimum_samples": 50
+  }
+}

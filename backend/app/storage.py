@@ -8,12 +8,21 @@ active carbon grids, and run results without heavy external database dependencie
 from __future__ import annotations
 
 from datetime import datetime, timezone
+import os
 from typing import Dict, List, Optional
 import uuid
 
 from backend.carbon.interface import CarbonDataProvider, CarbonGrid
 from backend.carbon.synthetic import SyntheticCarbonDataProvider
 from backend.scheduler.models import Job, MultiPolicyScheduleResponse
+
+
+def _create_default_provider() -> CarbonDataProvider:
+    provider_type = os.getenv("CARBONOVA_PROVIDER", "synthetic").lower().strip()
+    if provider_type in ("neso", "real", "recorded"):
+        from backend.carbon.neso_provider import NESORealTraceCarbonDataProvider
+        return NESORealTraceCarbonDataProvider()
+    return SyntheticCarbonDataProvider()
 
 
 class InMemoryStore:
@@ -23,7 +32,7 @@ class InMemoryStore:
         if carbon_provider is not None:
             self.set_carbon_provider(carbon_provider)
         else:
-            self._carbon_provider: CarbonDataProvider = SyntheticCarbonDataProvider()
+            self._carbon_provider: CarbonDataProvider = _create_default_provider()
 
     def set_carbon_provider(self, provider: CarbonDataProvider) -> None:
         """
@@ -44,9 +53,9 @@ class InMemoryStore:
 
     def reset_carbon_provider(self) -> None:
         """
-        Resets the active provider to the default SyntheticCarbonDataProvider.
+        Resets the active provider to the default (SyntheticCarbonDataProvider or configured environment provider).
         """
-        self._carbon_provider = SyntheticCarbonDataProvider()
+        self._carbon_provider = _create_default_provider()
 
     def add_jobs(self, jobs: List[Job]) -> List[Job]:
         for j in jobs:
