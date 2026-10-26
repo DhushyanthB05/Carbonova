@@ -11,15 +11,41 @@ from datetime import datetime, timezone
 from typing import Dict, List, Optional
 import uuid
 
-from backend.carbon.interface import CarbonGrid
+from backend.carbon.interface import CarbonDataProvider, CarbonGrid
 from backend.carbon.synthetic import SyntheticCarbonDataProvider
 from backend.scheduler.models import Job, MultiPolicyScheduleResponse
 
 
 class InMemoryStore:
-    def __init__(self) -> None:
+    def __init__(self, carbon_provider: Optional[CarbonDataProvider] = None) -> None:
         self._jobs: Dict[str, Job] = {}
         self._runs: List[Dict] = []
+        if carbon_provider is not None:
+            self.set_carbon_provider(carbon_provider)
+        else:
+            self._carbon_provider: CarbonDataProvider = SyntheticCarbonDataProvider()
+
+    def set_carbon_provider(self, provider: CarbonDataProvider) -> None:
+        """
+        Registers a custom CarbonDataProvider (e.g. Member 1's real grid data provider).
+        Raises TypeError if provider does not implement the CarbonDataProvider interface.
+        """
+        if not isinstance(provider, CarbonDataProvider):
+            raise TypeError(
+                f"provider must be an instance of CarbonDataProvider, got {type(provider).__name__}"
+            )
+        self._carbon_provider = provider
+
+    def get_carbon_provider(self) -> CarbonDataProvider:
+        """
+        Returns the currently active CarbonDataProvider instance.
+        """
+        return self._carbon_provider
+
+    def reset_carbon_provider(self) -> None:
+        """
+        Resets the active provider to the default SyntheticCarbonDataProvider.
+        """
         self._carbon_provider = SyntheticCarbonDataProvider()
 
     def add_jobs(self, jobs: List[Job]) -> List[Job]:
@@ -64,3 +90,18 @@ class InMemoryStore:
 
 # Global singleton instance
 store = InMemoryStore()
+
+
+def set_carbon_provider(provider: CarbonDataProvider) -> None:
+    """Convenience wrapper to register a custom CarbonDataProvider on the global store."""
+    store.set_carbon_provider(provider)
+
+
+def get_carbon_provider() -> CarbonDataProvider:
+    """Convenience wrapper to retrieve the active CarbonDataProvider from the global store."""
+    return store.get_carbon_provider()
+
+
+def reset_carbon_provider() -> None:
+    """Convenience wrapper to reset the global store's provider to default SyntheticCarbonDataProvider."""
+    store.reset_carbon_provider()
